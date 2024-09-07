@@ -25,7 +25,8 @@ public class PersonService {
   }
 
   public Person createPerson(Person request) {
-    var person = Person.builder().firstName(request.getFirstName()).lastName(request.getLastName()).age(request.getAge())
+    var person = Person.builder().firstName(request.getFirstName()).lastName(request.getLastName())
+        .age(request.getAge())
         .build();
     var savedPerson = personRepository.save(person);
     savePersonToFile(savedPerson);
