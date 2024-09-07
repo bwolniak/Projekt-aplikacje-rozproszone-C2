@@ -1,5 +1,7 @@
 package pl.bwolniak.api.service;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,19 @@ public class PersonService {
   }
 
   public Person createPerson(Person request) {
-    var p = Person.builder().firstName(request.getFirstName()).lastName(request.getLastName()).age(request.getAge())
+    var person = Person.builder().firstName(request.getFirstName()).lastName(request.getLastName()).age(request.getAge())
         .build();
-    return personRepository.save(p);
+    var savedPerson = personRepository.save(person);
+    savePersonToFile(savedPerson);
+    return savedPerson;
+  }
+
+  private void savePersonToFile(Person person) {
+    try (FileWriter writer = new FileWriter("persons.txt", true)) {
+      writer.write(person.toString() + "\n");
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
 }
